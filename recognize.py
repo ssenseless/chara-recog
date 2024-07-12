@@ -1,10 +1,7 @@
-import numpy as np
 import tensorflow as tf
 import logging
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.activations import linear, relu, sigmoid
-from extract import *
+from keras.src.models import Sequential
+from keras.src.layers import Dense
 from visualize import *
 
 
@@ -14,13 +11,9 @@ np.set_printoptions(precision=2)
 tf.random.set_seed(1123)
 
 
-def recognize(images, labels):
+def recognize(images, labels, out_dim):
     model = Sequential(
-        [
-            Dense(units=512, activation='relu'),
-            Dense(units=128, activation='relu'),
-            Dense(units=10)
-        ]
+        [Dense(units=(2 << i), activation='relu') for i in range(8) if (2 << i) > out_dim] + [Dense(units=out_dim)]
     )
 
     model.compile(
@@ -32,7 +25,7 @@ def recognize(images, labels):
     model.fit(
         images,
         labels,
-        epochs=10
+        epochs=25
     )
     
     return model
@@ -42,11 +35,23 @@ if __name__ == '__main__':
     visualize_random_64(
         data='digits',
         model=recognize(
-            extract_images("emnist-digits-train-images-idx3-ubyte"),
-            extract_labels(
+            images=extract_images("emnist-digits-train-images-idx3-ubyte"),
+            labels=extract_labels(
                 filename="emnist-digits-train-labels-idx1-ubyte",
                 mapping=None
-            )
+            ),
+            out_dim=len(extract_mapping("emnist-digits-mapping.txt"))
         )
     )
-    
+
+    visualize_random_64(
+        data='letters',
+        model=recognize(
+            images=extract_images("emnist-letters-train-images-idx3-ubyte"),
+            labels=extract_labels(
+                filename="emnist-letters-train-labels-idx1-ubyte",
+                mapping=None
+            ),
+            out_dim=len(extract_mapping("emnist-letters-mapping.txt"))
+        )
+    )

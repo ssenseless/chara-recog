@@ -9,8 +9,8 @@ def visualize_random_64(data, model):
     labels = extract_labels(filename=label_map[data],
                             mapping=map)
 
-    fig, axes = plt.subplots(8, 8, figsize=(5, 5))
-    fig.tight_layout(pad=0.1, rect=[0, 0.03, 1, 0.91])
+    fig, axes = plt.subplots(8, 8, figsize=(7, 7))
+    fig.tight_layout(pad=0.1, rect=(0, 0.03, 1, 0.91))
 
     for axis in axes.flat:
         rand = np.random.randint(images.shape[0])

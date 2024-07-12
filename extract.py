@@ -40,15 +40,18 @@ def extract_mapping(filename):
     mapping = {}
     with open(path, 'r') as file:
         for line in file:
-            mappings = line.split(" ")
-            mappings[1] = mappings[1].replace("\n", "")
-            mapping.update({int(mappings[0]): int(mappings[1])})
+            mappings = line[:-1].split(" ")
+            for i in range(len(mappings) - 1):
+                mapping.update({int(mappings[i]): int(mappings[len(mappings) - 1])})
 
     return mapping
 
+
 if __name__ == "__main__":
     test_i = extract_images("emnist-bymerge-train-images-idx3-ubyte")
-    test_l = extract_labels(filename="emnist-bymerge-train-labels-idx1-ubyte", mapping=extract_mapping("emnist-bymerge-mapping.txt"))
+    test_l = extract_labels(filename="emnist-bymerge-train-labels-idx1-ubyte")
+    test_m = extract_mapping("emnist-letters-mapping.txt")
 
     print(type(test_i))
     print(type(test_l))
+    print(type(test_m))
