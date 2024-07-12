@@ -6,17 +6,14 @@ def extract_images(filename):
     path = os.path.abspath(os.getcwd())
     path += f"\\data\\gzip\\{filename}"
 
-    images = []
-    map = np.memmap(path, mode='c', dtype='uint8')[16:]
-    while map is not None:
-        if len(map) == 784:
-            images.append(map[:784].reshape(28, 28))
-            map = None
-        else:
-            images.append(map[:784].reshape(28, 28).T)
-            map = map[784:]
+    map = np.memmap(path, mode='r', dtype='uint8')[16:]
 
-    return images
+    if len(map) % 784 != 0:
+        print("something wrong reading image binaries")
+    else:
+        images = [map[(784 * i):(784 * (i + 1))] for i in range(int(len(map) / 784))]
+
+    return np.array(images)
 
 
 def extract_labels(filename, mapping=None):
@@ -24,7 +21,7 @@ def extract_labels(filename, mapping=None):
     path += f"\\data\\gzip\\{filename}"
 
     labels = []
-    map = np.memmap(path, mode='c', dtype='uint8')[8:]
+    map = np.memmap(path, mode='r', dtype='uint8')[8:]
     if mapping is not None:
         for label in map:
             label = chr(mapping[label])
@@ -33,7 +30,7 @@ def extract_labels(filename, mapping=None):
         for label in map:
             labels.append(label)
 
-    return labels
+    return np.array(labels)
 
 
 def extract_mapping(filename):
@@ -53,5 +50,5 @@ if __name__ == "__main__":
     test_i = extract_images("emnist-bymerge-train-images-idx3-ubyte")
     test_l = extract_labels(filename="emnist-bymerge-train-labels-idx1-ubyte", mapping=extract_mapping("emnist-bymerge-mapping.txt"))
 
-    print(len(test_i))
-    print(len(test_l))
+    print(type(test_i))
+    print(type(test_l))
