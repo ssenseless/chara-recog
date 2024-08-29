@@ -4,7 +4,7 @@ import numpy as np
 
 def extract_images(filename):
     path = os.path.abspath(os.getcwd())
-    path += f"\\data\\gzip\\{filename}"
+    path += f"\\data\\{filename}"
 
     map = np.memmap(path, mode='r', dtype='uint8')[16:]
 
@@ -18,7 +18,7 @@ def extract_images(filename):
 
 def extract_labels(filename, mapping=None):
     path = os.path.abspath(os.getcwd())
-    path += f"\\data\\gzip\\{filename}"
+    path += f"\\data\\{filename}"
 
     labels = []
     map = np.memmap(path, mode='r', dtype='uint8')[8:]
@@ -35,7 +35,7 @@ def extract_labels(filename, mapping=None):
 
 def extract_mapping(filename):
     path = os.path.abspath(os.getcwd())
-    path += f"\\data\\gzip\\{filename}"
+    path += f"\\data\\{filename}"
 
     mapping = {}
     with open(path, 'r') as file:

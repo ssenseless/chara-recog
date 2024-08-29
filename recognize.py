@@ -1,3 +1,4 @@
+from numpy import ndarray
 import tensorflow as tf
 import logging
 from keras.src.models import Sequential
@@ -11,7 +12,7 @@ np.set_printoptions(precision=2)
 tf.random.set_seed(1123)
 
 
-def recognize(images, labels, out_dim):
+def recognize(images: ndarray, labels: ndarray, out_dim: int) -> Sequential:
     model = Sequential(
         [Dense(units=(2 << i), activation='relu') for i in range(8) if (2 << i) > out_dim] + [Dense(units=out_dim)]
     )
@@ -32,6 +33,17 @@ def recognize(images, labels, out_dim):
 
 
 if __name__ == '__main__':
+    print(type(
+        recognize(
+            images=extract_images("emnist-digits-train-images-idx3-ubyte"),
+            labels=extract_labels(
+                filename="emnist-digits-train-labels-idx1-ubyte",
+                mapping=None
+            ),
+            out_dim=len(extract_mapping("emnist-digits-mapping.txt"))
+        )
+    ))
+    
     visualize_random_64(
         data='digits',
         model=recognize(

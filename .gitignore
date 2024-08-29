@@ -1,4 +1,6 @@
 .idea/
 .venv/
 __pycache__/
-data/
+.vscode/
+ignore_data_unpack/
+data.zip

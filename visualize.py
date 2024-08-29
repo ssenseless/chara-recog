@@ -1,9 +1,10 @@
+import keras
 import numpy as np
 import matplotlib.pyplot as plt
 from extract import *
 
 
-def visualize_random_64(data, model):
+def visualize_random_64(data: str, model) -> None:
     map = extract_mapping(mapping_map[data])
     images = extract_images(filename=image_map[data])
     labels = extract_labels(filename=label_map[data],
